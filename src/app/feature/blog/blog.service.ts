@@ -18,6 +18,20 @@ const blogSchema = z.object({
   updatedAt: z.string(),
 });
 
+const blogDetailSchema = z.object({
+  id: z.number(),
+  title: z.string(),
+  content: z.string(),
+  author: z.string(),
+  likes: z.number(),
+  comments: z.array(z.unknown()),
+  likedByMe: z.boolean(),
+  createdByMe: z.boolean(),
+  headerImageUrl: z.string().optional(),
+  createdAt: z.string(),
+  updatedAt: z.string(),
+});
+
 const blogListSchema = z.object({
   data: z.array(blogSchema),
   pageIndex: z.number(),
@@ -52,14 +66,26 @@ export class BlogService {
   async getById(id: string): Promise<Blog | undefined> {
     try {
       const response = await firstValueFrom(this.http.get<unknown>(`${this.apiUrl}/${id}`));
-      const result = blogSchema.safeParse(response);
+      const result = blogDetailSchema.safeParse(response);
 
       if (!result.success) {
         console.error('Ungültige API-Antwort', result.error);
         return undefined;
       }
 
-      return result.data;
+      return {
+        id: result.data.id,
+        title: result.data.title,
+        contentPreview: result.data.content,
+        author: result.data.author,
+        likes: result.data.likes,
+        comments: result.data.comments.length,
+        likedByMe: result.data.likedByMe,
+        createdByMe: result.data.createdByMe,
+        headerImageUrl: result.data.headerImageUrl,
+        createdAt: result.data.createdAt,
+        updatedAt: result.data.updatedAt,
+      };
     } catch (error) {
       console.error(`Blog ${id} konnte nicht geladen werden`, error);
       return undefined;
@@ -77,7 +103,7 @@ export class BlogService {
 
   async updateBlog(id: string, blog: Blog): Promise<Blog> {
     try {
-      return await firstValueFrom(this.http.put<Blog>(`${this.apiUrl}/${id}`, blog));
+      return await firstValueFrom(this.http.patch<Blog>(`${this.apiUrl}/${id}`, blog));
     } catch (error) {
       console.error(`Blog ${id} konnte nicht aktualisiert werden`, error);
       throw error;

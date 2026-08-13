@@ -23,6 +23,21 @@ h1 {
   margin-bottom: vars.$spacing-lg;
 }
 
+.filter {
+  display: flex;
+  align-items: center;
+  gap: vars.$spacing-sm;
+  margin-bottom: vars.$spacing-lg;
+
+  select {
+    padding: vars.$spacing-sm vars.$spacing-md;
+    border: 1px solid var(--mat-sys-outline);
+    border-radius: 6px;
+    color: var(--mat-sys-on-surface);
+    background: var(--mat-sys-surface);
+  }
+}
+
 .loading-state,
 .error-state {
   justify-content: center;

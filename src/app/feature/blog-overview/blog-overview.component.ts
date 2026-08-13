@@ -18,6 +18,11 @@ export class BlogOverviewComponent implements OnInit {
     await this.state.loadBlogs();
   }
 
+  onAuthorChanged(event: Event): void {
+    const select = event.target as HTMLSelectElement;
+    this.state.setAuthor(select.value);
+  }
+
   async createBlog(): Promise<void> {
     const title = prompt('Titel des neuen Blogs:');
     if (!title) return;

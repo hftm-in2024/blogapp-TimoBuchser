@@ -1,4 +1,4 @@
-import { computed, inject, Injectable, signal } from '@angular/core';
+import { computed, effect, inject, Injectable, signal } from '@angular/core';
 import { BlogService } from '../feature/blog/blog.service';
 import { Blog } from '../shared/blog.model';
 
@@ -6,6 +6,7 @@ type BlogState = {
   blogs: Blog[];
   loading: boolean;
   error: string | null;
+  selectedAuthor: string;
 };
 
 @Injectable({
@@ -19,13 +20,33 @@ export class BlogStateService {
     blogs: [],
     loading: false,
     error: null,
+    selectedAuthor: localStorage.getItem('selectedAuthor') ?? 'all',
   });
 
   // Derived State
   readonly blogs = computed(() => this.#state().blogs);
   readonly loading = computed(() => this.#state().loading);
   readonly error = computed(() => this.#state().error);
+  readonly selectedAuthor = computed(() => this.#state().selectedAuthor);
   readonly blogCount = computed(() => this.blogs().length);
+
+  readonly authors = computed(() => [...new Set(this.blogs().map((blog) => blog.author))]);
+
+  readonly filteredBlogs = computed(() => {
+    const author = this.selectedAuthor();
+
+    if (author === 'all') {
+      return this.blogs();
+    }
+
+    return this.blogs().filter((blog) => blog.author === author);
+  });
+
+  constructor() {
+    effect(() => {
+      localStorage.setItem('selectedAuthor', this.selectedAuthor());
+    });
+  }
 
   // Actions
   async loadBlogs(): Promise<void> {
@@ -70,6 +91,10 @@ export class BlogStateService {
     } catch {
       this.#mutationFailed();
     }
+  }
+
+  setAuthor(author: string): void {
+    this.#authorSelected(author);
   }
 
   // Reducer
@@ -134,6 +159,13 @@ export class BlogStateService {
       ...state,
       error: 'Die Änderung konnte nicht gespeichert werden.',
       loading: false,
+    }));
+  }
+
+  #authorSelected(author: string): void {
+    this.#state.update((state) => ({
+      ...state,
+      selectedAuthor: author,
     }));
   }
 }

@@ -8,6 +8,18 @@
     <button mat-flat-button type="button" (click)="createBlog()">Neuen Blog erstellen</button>
   </div>
 
+  <div class="filter">
+    <label for="author-filter">Autor</label>
+
+    <select id="author-filter" [value]="state.selectedAuthor()" (change)="onAuthorChanged($event)">
+      <option value="all">Alle Autoren</option>
+
+      @for (author of state.authors(); track author) {
+        <option [value]="author">{{ author }}</option>
+      }
+    </select>
+  </div>
+
   @if (state.loading()) {
     <div class="loading-state">
       <mat-spinner diameter="44" />
@@ -24,7 +36,7 @@
 
   @if (!state.loading()) {
     <div class="blog-grid">
-      @for (blog of state.blogs(); track blog.id) {
+      @for (blog of state.filteredBlogs(); track blog.id) {
         <app-blog-card
           [model]="blog"
           (liked)="onBlogLiked($event)"
@@ -32,7 +44,7 @@
           (deleted)="deleteBlog($event)"
         />
       } @empty {
-        <p>Keine Blog-Posts vorhanden.</p>
+        <p>Keine Blog-Posts für diesen Autor vorhanden.</p>
       }
     </div>
   }
