@@ -2,7 +2,7 @@ import { computed, effect, inject, Injectable, signal } from '@angular/core';
 import { BlogService } from '../feature/blog/blog.service';
 import { Blog } from '../shared/blog.model';
 
-type BlogState = {
+export type BlogState = {
   blogs: Blog[];
   loading: boolean;
   error: string | null;
