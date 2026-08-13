@@ -35,7 +35,40 @@ export class BlogStateService {
       const blogs = await this.blogService.getBlogs();
       this.#loadSucceeded(blogs);
     } catch {
-      this.#loadFailed('Blogs konnten nicht geladen werden.');
+      this.#loadFailed('Die Blog-Beiträge konnten nicht geladen werden.');
+    }
+  }
+
+  async createBlog(blog: Blog): Promise<void> {
+    this.#mutationStarted();
+
+    try {
+      const created = await this.blogService.createBlog(blog);
+      this.#blogCreated(created);
+    } catch {
+      this.#mutationFailed();
+    }
+  }
+
+  async updateBlog(blog: Blog): Promise<void> {
+    this.#mutationStarted();
+
+    try {
+      const updated = await this.blogService.updateBlog(String(blog.id), blog);
+      this.#blogUpdated(updated);
+    } catch {
+      this.#mutationFailed();
+    }
+  }
+
+  async deleteBlog(id: number): Promise<void> {
+    this.#mutationStarted();
+
+    try {
+      await this.blogService.deleteBlog(String(id));
+      this.#blogDeleted(id);
+    } catch {
+      this.#mutationFailed();
     }
   }
 
@@ -60,6 +93,46 @@ export class BlogStateService {
     this.#state.update((state) => ({
       ...state,
       error: message,
+      loading: false,
+    }));
+  }
+
+  #mutationStarted(): void {
+    this.#state.update((state) => ({
+      ...state,
+      loading: true,
+      error: null,
+    }));
+  }
+
+  #blogCreated(blog: Blog): void {
+    this.#state.update((state) => ({
+      ...state,
+      blogs: [blog, ...state.blogs],
+      loading: false,
+    }));
+  }
+
+  #blogUpdated(blog: Blog): void {
+    this.#state.update((state) => ({
+      ...state,
+      blogs: state.blogs.map((item) => (item.id === blog.id ? blog : item)),
+      loading: false,
+    }));
+  }
+
+  #blogDeleted(id: number): void {
+    this.#state.update((state) => ({
+      ...state,
+      blogs: state.blogs.filter((blog) => blog.id !== id),
+      loading: false,
+    }));
+  }
+
+  #mutationFailed(): void {
+    this.#state.update((state) => ({
+      ...state,
+      error: 'Die Änderung konnte nicht gespeichert werden.',
       loading: false,
     }));
   }
