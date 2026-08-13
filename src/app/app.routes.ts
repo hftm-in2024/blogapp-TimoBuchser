@@ -1,29 +1,34 @@
 import { Routes } from '@angular/router';
-
-import { BlogOverviewPageComponent } from './feature/blog-overview-page/blog-overview-page.component';
+import { BlogOverviewComponent } from './feature/blog-overview/blog-overview.component';
+import { blogResolver } from './feature/blog/blog.resolver';
 
 export const routes: Routes = [
   {
     path: '',
-    component: BlogOverviewPageComponent,
+    component: BlogOverviewComponent,
+    title: 'Blog-Übersicht',
   },
   {
     path: 'blog/:id',
     loadComponent: () =>
-      import('./feature/blog-detail-page/blog-detail-page.component').then(
-        (m) => m.BlogDetailPageComponent,
+      import('./feature/blog-detail/blog-detail.component').then(
+        (module) => module.BlogDetailComponent,
       ),
+    resolve: { blog: blogResolver },
+    title: 'Blog-Detail',
   },
   {
     path: 'about',
     loadComponent: () =>
-      import('./feature/about-page/about-page.component').then((m) => m.AboutPageComponent),
+      import('./feature/about/about.component').then((module) => module.AboutComponent),
+    title: 'Über uns',
   },
   {
     path: '**',
     loadComponent: () =>
-      import('./feature/not-found-page/not-found-page.component').then(
-        (m) => m.NotFoundPageComponent,
+      import('./feature/not-found/not-found.component').then(
+        (module) => module.NotFoundComponent,
       ),
+    title: 'Seite nicht gefunden',
   },
 ];

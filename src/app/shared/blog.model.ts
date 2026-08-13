@@ -8,6 +8,14 @@ export type Blog = {
   likedByMe: boolean;
   createdByMe: boolean;
   headerImageUrl?: string;
-  createdAt?: string;
-  updatedAt?: string;
-};
+  createdAt: string;
+  updatedAt: string;
+}
+
+export type BlogApiResponse = {
+  data: Blog[];
+  pageIndex: number;
+  pageSize: number;
+  totalCount: number;
+  maxPageSize: number;
+}

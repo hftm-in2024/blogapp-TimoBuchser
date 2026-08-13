@@ -1,17 +1,15 @@
-@use './variables' as vars;
-
-@mixin flex-center {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
-@mixin responsive-grid {
+@mixin responsive-grid($min-width: 280px) {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-  gap: vars.$spacing-lg;
+  grid-template-columns: repeat(auto-fit, minmax($min-width, 1fr));
 }
 
-@mixin soft-shadow {
-  box-shadow: 0 14px 40px rgba(0, 0, 0, 0.16);
+@mixin card-lift {
+  transition:
+    transform 160ms ease,
+    box-shadow 160ms ease;
+
+  &:hover {
+    transform: translateY(-4px);
+    box-shadow: var(--mat-sys-level3);
+  }
 }

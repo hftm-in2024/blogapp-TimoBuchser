@@ -1,0 +1,24 @@
+<mat-toolbar>
+  <a class="brand" routerLink="/">
+    <mat-icon>article</mat-icon>
+    <span>BlogApp</span>
+  </a>
+
+  <nav>
+    <a routerLink="/" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }">
+      Blogs
+    </a>
+    <a routerLink="/about" routerLinkActive="active">Über uns</a>
+  </nav>
+
+  <span class="spacer"></span>
+
+  <button
+    mat-icon-button
+    type="button"
+    [attr.aria-label]="theme.darkMode() ? 'Light Mode aktivieren' : 'Dark Mode aktivieren'"
+    (click)="theme.toggle()"
+  >
+    <mat-icon>{{ theme.darkMode() ? 'light_mode' : 'dark_mode' }}</mat-icon>
+  </button>
+</mat-toolbar>

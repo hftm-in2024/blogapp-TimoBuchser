@@ -1,10 +1,12 @@
-<mat-card class="blog-card" appearance="outlined">
+<mat-card>
   @if (model().headerImageUrl) {
     <img mat-card-image [src]="model().headerImageUrl" [alt]="model().title" />
   }
 
   <mat-card-header>
-    <mat-card-title>{{ model().title }}</mat-card-title>
+    <mat-card-title>
+      <a [routerLink]="['/blog', model().id]">{{ model().title }}</a>
+    </mat-card-title>
     <mat-card-subtitle>von {{ model().author }}</mat-card-subtitle>
   </mat-card-header>
 
@@ -12,11 +14,16 @@
     <p>{{ model().contentPreview }}</p>
   </mat-card-content>
 
-  <mat-card-actions align="end">
+  <mat-card-actions>
     <button mat-icon-button type="button" aria-label="Blog liken" (click)="onLike()">
       <mat-icon>{{ model().likedByMe ? 'favorite' : 'favorite_border' }}</mat-icon>
     </button>
-    <span class="likes">{{ model().likes }}</span>
-    <a mat-button [routerLink]="['/blog', model().id]">Details</a>
+    <span>{{ model().likes }}</span>
+    <a mat-button [routerLink]="['/blog', model().id]">Weiterlesen</a>
+
+    @if (model().createdByMe) {
+      <button mat-button type="button" (click)="edited.emit(model())">Bearbeiten</button>
+      <button mat-button type="button" (click)="deleted.emit(model().id)">Löschen</button>
+    }
   </mat-card-actions>
 </mat-card>

@@ -1,39 +1,34 @@
-@use '../../../styles/variables' as vars;
 @use '../../../styles/mixins' as mixins;
+@use '../../../styles/variables' as vars;
 
-.blog-card {
+mat-card {
+  @include mixins.card-lift;
   height: 100%;
-  border-radius: vars.$radius-lg;
   overflow: hidden;
-  transition:
-    transform 160ms ease,
-    box-shadow 160ms ease;
+  border-radius: vars.$radius-md;
+  color: var(--mat-sys-on-surface);
+  background: var(--mat-sys-surface-container);
+}
 
-  &:hover {
-    transform: translateY(-3px);
-    @include mixins.soft-shadow;
-  }
+img {
+  aspect-ratio: 2 / 1;
+  object-fit: cover;
+}
 
-  img {
-    height: 180px;
-    object-fit: cover;
-  }
+mat-card-content {
+  padding-top: vars.$spacing-md;
+}
 
-  mat-card-content {
-    padding-top: vars.$spacing-md;
+mat-card-actions {
+  gap: vars.$spacing-xs;
+  margin-top: auto;
+}
 
-    p {
-      margin: 0;
-      line-height: 1.55;
-    }
-  }
+mat-card-title a {
+  color: var(--mat-sys-on-surface);
+  text-decoration: none;
+}
 
-  mat-card-actions {
-    gap: vars.$spacing-xs;
-  }
-
-  .likes {
-    margin-right: auto;
-    color: var(--mat-sys-on-surface-variant);
-  }
+mat-card-title a:hover {
+  color: var(--mat-sys-primary);
 }
