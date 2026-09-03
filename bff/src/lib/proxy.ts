@@ -1,0 +1,76 @@
+import { Cookie, HttpRequest } from '@azure/functions';
+import {
+  clearSessionCookieObj,
+  isSessionExpired,
+  parseCookie,
+  sealSession,
+  SessionData,
+  sessionCookie,
+  unsealSession,
+} from './session.js';
+import { refreshTokens } from './keycloak.js';
+
+const BACKEND_API_URL = process.env.BACKEND_API_URL!;
+
+type ProxyResult = {
+  status: number;
+  body: unknown;
+  headers: Record<string, string>;
+  cookies: Cookie[];
+};
+
+export async function proxyToBackend(
+  request: HttpRequest,
+  path: string,
+  method: string,
+): Promise<ProxyResult> {
+  const sealed = parseCookie(request.headers.get('cookie'));
+  const responseCookies: Cookie[] = [];
+  let session: SessionData | null = sealed ? await unsealSession(sealed) : null;
+  let accessToken: string | undefined;
+
+  if (session) {
+    if (isSessionExpired(session)) {
+      try {
+        const tokens = await refreshTokens(session.refreshToken);
+        session = {
+          accessToken: tokens.access_token,
+          refreshToken: tokens.refresh_token,
+          expiresAt: Date.now() + tokens.expires_in * 1000,
+        };
+        responseCookies.push(sessionCookie(await sealSession(session)));
+      } catch {
+        return {
+          status: 401,
+          body: { error: 'Session expired' },
+          headers: {},
+          cookies: [clearSessionCookieObj()],
+        };
+      }
+    }
+    accessToken = session.accessToken;
+  }
+
+  const backendHeaders: Record<string, string> = { 'Content-Type': 'application/json' };
+  if (accessToken) backendHeaders.Authorization = `Bearer ${accessToken}`;
+
+  const fetchOptions: RequestInit = { method, headers: backendHeaders };
+  if (method === 'POST' || method === 'PUT' || method === 'PATCH') {
+    const body = await request.text();
+    if (body) fetchOptions.body = body;
+  }
+
+  const queryString = request.query.toString();
+  const url = queryString
+    ? `${BACKEND_API_URL}${path}?${queryString}`
+    : `${BACKEND_API_URL}${path}`;
+  const backendResponse = await fetch(url, fetchOptions);
+  const responseBody = await backendResponse.json().catch(() => null);
+
+  return {
+    status: backendResponse.status,
+    body: responseBody,
+    headers: {},
+    cookies: responseCookies,
+  };
+}

@@ -1,8 +1,20 @@
 import { Routes } from '@angular/router';
 import { BlogOverviewComponent } from './feature/blog-overview/blog-overview.component';
 import { blogResolver } from './feature/blog/blog.resolver';
+import { authGuard } from './guards/auth.guard';
 
 export const routes: Routes = [
+  {
+    path: 'login',
+    loadComponent: () =>
+      import('./feature/login/login.component').then((module) => module.LoginComponent),
+    title: 'Anmelden',
+  },
+  {
+    path: 'blog/create',
+    canMatch: [authGuard],
+    redirectTo: '',
+  },
   {
     path: '',
     component: BlogOverviewComponent,
@@ -26,9 +38,7 @@ export const routes: Routes = [
   {
     path: '**',
     loadComponent: () =>
-      import('./feature/not-found/not-found.component').then(
-        (module) => module.NotFoundComponent,
-      ),
+      import('./feature/not-found/not-found.component').then((module) => module.NotFoundComponent),
     title: 'Seite nicht gefunden',
   },
 ];

@@ -13,6 +13,13 @@
 
   <span class="spacer"></span>
 
+  @if (auth.isAuthenticated()) {
+    <span class="username">{{ auth.user()?.preferred_username }}</span>
+    <button mat-button type="button" (click)="auth.logout()">Logout</button>
+  } @else {
+    <a mat-button routerLink="/login">Login</a>
+  }
+
   <button
     mat-icon-button
     type="button"

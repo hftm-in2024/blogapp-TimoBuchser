@@ -1,0 +1,10 @@
+<section class="login-page" aria-labelledby="login-title">
+  <h1 id="login-title">Anmelden</h1>
+
+  @if (errorMessage(); as message) {
+    <p class="error" role="alert">{{ message }}</p>
+  }
+
+  <p>Bitte melde dich an, um Blogs zu erstellen und zu bearbeiten.</p>
+  <button mat-flat-button type="button" (click)="login()">Zum Login</button>
+</section>

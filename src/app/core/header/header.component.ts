@@ -4,6 +4,7 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatToolbarModule } from '@angular/material/toolbar';
 import { RouterLink, RouterLinkActive } from '@angular/router';
 import { ThemeService } from '../theme/theme.service';
+import { AuthStore } from '../../services/auth-store';
 
 @Component({
   selector: 'app-header',
@@ -13,4 +14,5 @@ import { ThemeService } from '../theme/theme.service';
 })
 export class HeaderComponent {
   readonly theme = inject(ThemeService);
+  readonly auth = inject(AuthStore);
 }
