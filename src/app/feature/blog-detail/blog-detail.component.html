@@ -1,0 +1,21 @@
+@if (blog(); as post) {
+  <article>
+    <a mat-button routerLink="/">Zurück zur Übersicht</a>
+    <mat-card>
+      @if (post.headerImageUrl) {
+        <img mat-card-image [src]="post.headerImageUrl" [alt]="post.title" />
+      }
+      <mat-card-header>
+        <mat-card-title>{{ post.title }}</mat-card-title>
+        <mat-card-subtitle>von {{ post.author }}</mat-card-subtitle>
+      </mat-card-header>
+      <mat-card-content>
+        <p>{{ post.contentPreview }}</p>
+        <p>{{ post.likes }} Likes · {{ post.comments }} Kommentare</p>
+      </mat-card-content>
+    </mat-card>
+  </article>
+} @else {
+  <h1>Blog nicht gefunden</h1>
+  <a mat-button routerLink="/">Zur Übersicht</a>
+}

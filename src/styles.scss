@@ -1,39 +1,27 @@
-@use '@angular/material' as mat;
-@use './styles/theme' as theme;
-@use './styles/variables' as vars;
+@use './styles/theme' as app-theme;
 
-html {
-  @include mat.all-component-themes(theme.$light-theme);
-  color-scheme: light;
-}
-
-body.dark-theme {
-  @include mat.all-component-colors(theme.$dark-theme);
-  color-scheme: dark;
-}
+@include app-theme.apply-themes;
 
 html,
 body {
   min-height: 100%;
 }
 
+html {
+  background: var(--mat-sys-surface);
+}
+
 body {
   margin: 0;
-  font-family: Roboto, 'Helvetica Neue', sans-serif;
-  background:
-    radial-gradient(
-      circle at top left,
-      color-mix(in srgb, var(--mat-sys-primary) 18%, transparent),
-      transparent 30rem
-    ),
-    var(--mat-sys-surface);
   color: var(--mat-sys-on-surface);
+  background: var(--mat-sys-surface);
+  font-family: Roboto, 'Helvetica Neue', sans-serif;
+  transition:
+    color 180ms ease,
+    background-color 180ms ease;
 }
 
-* {
-  box-sizing: border-box;
-}
-
+button,
 a {
-  color: inherit;
+  font: inherit;
 }

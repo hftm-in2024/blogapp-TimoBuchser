@@ -1,65 +1,13 @@
 @use '../styles/variables' as vars;
-@use '../styles/mixins' as mixins;
 
-.app-toolbar {
-  position: sticky;
-  top: 0;
-  z-index: 10;
-  gap: vars.$spacing-md;
-  padding-inline: clamp(vars.$spacing-md, 4vw, vars.$spacing-xl);
-  background: linear-gradient(135deg, var(--mat-sys-primary), var(--mat-sys-tertiary));
-  color: var(--mat-sys-on-primary);
-}
-
-.brand {
-  color: inherit;
-  font-weight: 700;
-  text-decoration: none;
-  white-space: nowrap;
-}
-
-.nav-links {
-  display: flex;
-  gap: vars.$spacing-sm;
-
-  a {
-    padding: vars.$spacing-xs vars.$spacing-sm;
-    border-radius: 999px;
-    color: inherit;
-    text-decoration: none;
-    opacity: 0.82;
-
-    &:hover,
-    &.active {
-      background: rgba(255, 255, 255, 0.18);
-      opacity: 1;
-    }
-  }
-}
-
-.spacer {
-  flex: 1 1 auto;
+:host {
+  display: block;
+  min-height: 100vh;
+  background: var(--mat-sys-surface);
 }
 
 .content {
-  width: min(1180px, calc(100% - 2rem));
+  max-width: vars.$content-width;
   margin: 0 auto;
-  padding: vars.$spacing-xl 0 vars.$spacing-xxl;
-}
-
-@media (max-width: 700px) {
-  .app-toolbar {
-    align-items: flex-start;
-    height: auto;
-    flex-wrap: wrap;
-    padding-block: vars.$spacing-sm;
-  }
-
-  .nav-links {
-    width: 100%;
-  }
-
-  .spacer {
-    display: none;
-  }
+  padding: vars.$spacing-xl vars.$spacing-md;
 }

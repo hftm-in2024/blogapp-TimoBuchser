@@ -1,18 +1,4 @@
-<mat-toolbar class="app-toolbar">
-  <a class="brand" routerLink="/">{{ title }}</a>
-
-  <nav class="nav-links" aria-label="Hauptnavigation">
-    <a routerLink="/" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }">Blog</a>
-    <a routerLink="/about" routerLinkActive="active">About</a>
-  </nav>
-
-  <span class="spacer"></span>
-
-  <button mat-icon-button type="button" aria-label="Dark Mode umschalten" (click)="toggleTheme()">
-    <mat-icon>{{ isDarkTheme() ? 'light_mode' : 'dark_mode' }}</mat-icon>
-  </button>
-</mat-toolbar>
-
+<app-header />
 <main class="content">
   <router-outlet />
 </main>

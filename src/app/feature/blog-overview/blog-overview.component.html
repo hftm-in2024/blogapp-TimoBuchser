@@ -1,0 +1,51 @@
+<section>
+  <div class="page-heading">
+    <div>
+      <h1>Blog-Übersicht</h1>
+      <span>{{ state.blogCount() }} Blog-Posts</span>
+    </div>
+
+    <button mat-flat-button type="button" (click)="createBlog()">Neuen Blog erstellen</button>
+  </div>
+
+  <div class="filter">
+    <label for="author-filter">Autor</label>
+
+    <select id="author-filter" [value]="state.selectedAuthor()" (change)="onAuthorChanged($event)">
+      <option value="all">Alle Autoren</option>
+
+      @for (author of state.authors(); track author) {
+        <option [value]="author">{{ author }}</option>
+      }
+    </select>
+  </div>
+
+  @if (state.loading()) {
+    <div class="loading-state">
+      <mat-spinner diameter="44" />
+      <span>Laden...</span>
+    </div>
+  }
+
+  @if (state.error()) {
+    <div class="error-state">
+      <p>{{ state.error() }}</p>
+      <button mat-button type="button" (click)="state.loadBlogs()">Erneut versuchen</button>
+    </div>
+  }
+
+  @if (!state.loading()) {
+    <div class="blog-grid">
+      @for (blog of state.filteredBlogs(); track blog.id) {
+        <app-blog-card
+          [model]="blog"
+          (liked)="onBlogLiked($event)"
+          (edited)="editBlog($event)"
+          (deleted)="deleteBlog($event)"
+        />
+      } @empty {
+        <p>Keine Blog-Posts für diesen Autor vorhanden.</p>
+      }
+    </div>
+  }
+</section>

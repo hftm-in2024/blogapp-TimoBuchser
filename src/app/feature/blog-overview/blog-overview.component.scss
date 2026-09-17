@@ -1,0 +1,50 @@
+@use '../../../styles/mixins' as mixins;
+@use '../../../styles/variables' as vars;
+
+h1 {
+  color: var(--mat-sys-primary);
+}
+
+.blog-grid {
+  @include mixins.responsive-grid(280px);
+  gap: vars.$spacing-lg;
+}
+
+.page-heading,
+.loading-state,
+.error-state {
+  display: flex;
+  align-items: center;
+  gap: vars.$spacing-md;
+}
+
+.page-heading {
+  justify-content: space-between;
+  margin-bottom: vars.$spacing-lg;
+}
+
+.filter {
+  display: flex;
+  align-items: center;
+  gap: vars.$spacing-sm;
+  margin-bottom: vars.$spacing-lg;
+
+  select {
+    padding: vars.$spacing-sm vars.$spacing-md;
+    border: 1px solid var(--mat-sys-outline);
+    border-radius: 6px;
+    color: var(--mat-sys-on-surface);
+    background: var(--mat-sys-surface);
+  }
+}
+
+.loading-state,
+.error-state {
+  justify-content: center;
+  min-height: 180px;
+}
+
+.error-state {
+  flex-direction: column;
+  color: var(--mat-sys-error);
+}
