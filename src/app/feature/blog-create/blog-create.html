@@ -1,0 +1,42 @@
+<h1>Blog erstellen</h1>
+
+<form (submit)="onSubmit($event)">
+  <div>
+    <label for="title">Titel</label>
+    <input id="title" type="text" [formField]="blogForm.title" />
+
+    @if (blogForm.title().touched() && blogForm.title().invalid()) {
+      @for (error of blogForm.title().errors(); track error.kind) {
+        <p>{{ error.message }}</p>
+      }
+    }
+  </div>
+
+  <div>
+    <label for="content">Inhalt</label>
+    <textarea id="content" [formField]="blogForm.content"></textarea>
+
+    @if (blogForm.content().touched() && blogForm.content().invalid()) {
+      @for (error of blogForm.content().errors(); track error.kind) {
+        <p>{{ error.message }}</p>
+      }
+    }
+  </div>
+
+  <div>
+    <label for="category">Kategorie</label>
+    <select id="category" [formField]="blogForm.category">
+      <option value="general">Allgemein</option>
+      <option value="technology">Technik</option>
+      <option value="lifestyle">Lifestyle</option>
+    </select>
+
+    @if (blogForm.category().touched() && blogForm.category().invalid()) {
+      @for (error of blogForm.category().errors(); track error.kind) {
+        <p>{{ error.message }}</p>
+      }
+    }
+  </div>
+
+  <button type="submit" [disabled]="blogForm().invalid()">Blog erstellen</button>
+</form>

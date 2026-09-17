@@ -18,6 +18,12 @@ export const routes: Routes = [
     title: 'Blog-Detail',
   },
   {
+    path: 'blog-create',
+    loadComponent: () =>
+      import('./feature/blog-create/blog-create').then((module) => module.BlogCreate),
+    title: 'Blog erstellen',
+  },
+  {
     path: 'about',
     loadComponent: () =>
       import('./feature/about/about.component').then((module) => module.AboutComponent),
@@ -26,9 +32,7 @@ export const routes: Routes = [
   {
     path: '**',
     loadComponent: () =>
-      import('./feature/not-found/not-found.component').then(
-        (module) => module.NotFoundComponent,
-      ),
+      import('./feature/not-found/not-found.component').then((module) => module.NotFoundComponent),
     title: 'Seite nicht gefunden',
   },
 ];
