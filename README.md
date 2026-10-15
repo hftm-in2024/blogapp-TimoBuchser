@@ -87,10 +87,10 @@ ng test
 For end-to-end (e2e) testing, run:
 
 ```bash
-ng e2e
+npm run e2e
 ```
 
-Angular CLI does not come with an end-to-end testing framework by default. You can choose one that suits your needs.
+Playwright runs the browser tests in `e2e/` and starts the local web server automatically. Install Chromium once with `npx playwright install chromium`. See [KT12 testing documentation](KT12-TESTING.md) for acceptance criteria, test coverage, and verification results.
 
 ## Additional Resources
 
